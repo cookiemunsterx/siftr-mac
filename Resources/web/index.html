@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Siftr</title>
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body data-page="sift">
+
+<!-- ============================================================ Sifting -->
+<section class="page" id="page-sift">
+  <div class="card now-card">
+    <div class="art" id="s-art-box">
+      <svg class="art-ph" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="17"/><circle cx="50" cy="50" r="2.7"/></svg>
+      <img id="s-art" alt="" hidden>
+    </div>
+    <div class="np">
+      <div class="label">Now sifting</div>
+      <h1 id="s-title" class="title">Nothing loaded</h1>
+      <div id="s-sub" class="sub">Open a folder of music to begin</div>
+      <canvas id="s-viz" class="viz" aria-hidden="true"></canvas>
+      <div id="s-long" class="long-note" hidden>Over 20 minutes: it plays and can be sorted, without the visualizer.</div>
+      <div class="seek" id="s-seek" role="slider" aria-label="Song position"><div class="seek-track"><div class="seek-fill"></div></div><div class="seek-knob"></div></div>
+      <div class="times"><span id="s-pos">0:00</span><span id="s-dur">0:00</span></div>
+      <div class="transport">
+        <button id="s-back" class="circle" title="Back 10 seconds" aria-label="Back 10 seconds"><svg class="ten" viewBox="0 0 24 24" aria-hidden="true"><path class="arc" d="M12 4.6a7.4 7.4 0 1 1-7.4 7.4"/><path d="M12.4 1.9v5.4L8.6 4.6z"/><text x="12" y="15.3" text-anchor="middle">10</text></svg></button>
+        <button id="s-play" class="primary" title="Play / pause (space)" aria-label="Play"><svg viewBox="0 0 24 24"><path class="i-play" d="M8 5.2v13.6L19 12z"/><path class="i-pause" d="M6.8 5h3.6v14H6.8zm6.8 0h3.6v14h-3.6z"/></svg></button>
+        <button id="s-fwd" class="circle" title="Forward 10 seconds" aria-label="Forward 10 seconds"><svg class="ten" viewBox="0 0 24 24" aria-hidden="true"><path class="arc" d="M12 4.6a7.4 7.4 0 1 0 7.4 7.4"/><path d="M11.6 1.9v5.4l3.8-2.7z"/><text x="12" y="15.3" text-anchor="middle">10</text></svg></button>
+        <div class="volume"><svg class="speaker" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.2h3.8L12 4.6v14.8l-5.2-4.6H3z"/><path class="wave" d="M15.2 8.6a4.6 4.6 0 0 1 0 6.8M17.8 6a8.4 8.4 0 0 1 0 12"/></svg><input type="range" class="vol" min="0" max="100" value="70" title="Volume (↑ ↓)" aria-label="Volume"></div>
+        <div class="verdicts">
+          <button id="keep" class="verdict keep" title="Keep: copy it into your library (K)">Keep <kbd>K</kbd></button>
+          <button id="pass" class="verdict pass" title="Pass: leave it out (P)">Pass <kbd>P</kbd></button>
+          <button id="skip" class="verdict skip" title="Skip: decide later (S)">Skip <kbd>S</kbd></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lists">
+    <div class="card panel">
+      <div class="panel-head"><span>Up next</span><span id="q-count" class="count"></span></div>
+      <ol id="queue" class="rows"></ol>
+      <div id="q-empty" class="panel-empty">
+        <svg class="empty-icon" viewBox="0 0 48 48"><path d="M6 14a4 4 0 0 1 4-4h9l4 4h15a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path d="M24 20v10M19 25l5 5 5-5"/></svg>
+        <button id="open" class="btn accent">Open Folder…</button>
+        <div>or drop a folder anywhere on this window</div>
+      </div>
+    </div>
+    <div class="card panel">
+      <div class="panel-head"><span>Sorted this session</span><span class="hint">double-click to undo</span></div>
+      <ol id="session" class="rows"></ol>
+      <div id="s-empty" class="panel-empty quiet">Songs you keep or pass show up here.</div>
+    </div>
+  </div>
+
+  <footer class="status">
+    <span id="status">Ready</span>
+    <span id="lifetime" class="lifetime"></span>
+    <div class="grow"></div>
+    <div class="progress" id="progress" hidden><span id="progress-text"></span><div class="bar"><i class="k"></i><i class="p"></i></div></div>
+    <button id="finish" class="btn ghost small" disabled title="When you're done with this folder: checks every kept song is safe in your library, then moves the folder to the Trash">Finish batch…</button>
+  </footer>
+</section>
+
+<!-- ============================================================ Library -->
+<section class="page" id="page-library">
+  <header class="page-head">
+    <div class="seg" id="lib-mode">
+      <button data-mode="songs" class="on">Songs</button>
+      <button data-mode="albums">Albums</button>
+      <button data-mode="lyrics" class="lyrics-only">Lyrics</button>
+    </div>
+    <label class="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lib-search" type="search" placeholder="Search your library" autocomplete="off" spellcheck="false"></label>
+    <div class="grow"></div>
+    <span id="lib-count" class="muted small"></span>
+    <button id="lib-reveal" class="btn ghost small" title="Open the library folder in Finder">Show in Finder</button>
+  </header>
+
+  <div id="lib-songs" class="lib-body">
+    <div class="table-head songs-grid">
+      <span></span><button data-sort="title">Title</button><button data-sort="artist">Artist</button><button data-sort="album">Album</button>
+      <button data-sort="plays" class="num">Plays</button><button data-sort="duration" class="num">Time</button><span class="status-head">Status</span>
+    </div>
+    <div id="lib-rows" class="table-rows"></div>
+  </div>
+  <div id="lib-albums" class="lib-body album-grid" hidden></div>
+  <div id="lib-album" class="lib-body album-detail" hidden></div>
+  <div id="lib-lyrics" class="lib-body lyric-results" hidden></div>
+  <div id="lib-empty" class="empty-state" hidden>
+    <svg class="empty-icon big" viewBox="0 0 48 48"><path d="M18 36V12l20-4v24"/><circle cx="13" cy="36" r="5"/><circle cx="33" cy="32" r="5"/></svg>
+    <h2>Your library is empty</h2>
+    <p>Songs you keep while sifting are copied here, into <span id="lib-folder" class="mono"></span>.</p>
+    <button class="btn accent" data-open>Open a Folder to Sift…</button>
+  </div>
+</section>
+
+<!-- ======================================================== Now Playing -->
+<section class="page" id="page-now">
+  <div class="np-grid" id="np-view" hidden>
+    <aside class="np-side">
+      <div class="art big-art" id="np-art-box">
+        <svg class="art-ph" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="17"/><circle cx="50" cy="50" r="2.7"/></svg>
+        <img id="np-art" alt="" hidden>
+      </div>
+      <div class="np-meta">
+        <div class="label" id="np-label">Now playing</div>
+        <h1 id="np-title" class="title"></h1>
+        <div id="np-artist" class="sub"></div>
+      </div>
+      <div class="seek" id="np-seek" role="slider" aria-label="Song position"><div class="seek-track"><div class="seek-fill"></div></div><div class="seek-knob"></div></div>
+      <div class="times"><span id="np-pos">0:00</span><span id="np-dur">0:00</span></div>
+      <div class="transport center">
+        <button id="np-back" class="circle small" title="Back 10 seconds" aria-label="Back 10 seconds"><svg class="ten" viewBox="0 0 24 24" aria-hidden="true"><path class="arc" d="M12 4.6a7.4 7.4 0 1 1-7.4 7.4"/><path d="M12.4 1.9v5.4L8.6 4.6z"/><text x="12" y="15.3" text-anchor="middle">10</text></svg></button>
+        <button id="np-prev" class="circle" title="Previous song (⌘←)" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 5h2.2v14H6zM20 5.8v12.4L9.4 12z"/></svg></button>
+        <button id="np-play" class="primary" aria-label="Play"><svg viewBox="0 0 24 24"><path class="i-play" d="M8 5.2v13.6L19 12z"/><path class="i-pause" d="M6.8 5h3.6v14H6.8zm6.8 0h3.6v14h-3.6z"/></svg></button>
+        <button id="np-next" class="circle" title="Next song (⌘→)" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M15.8 5H18v14h-2.2zM4 5.8v12.4L14.6 12z"/></svg></button>
+        <button id="np-fwd" class="circle small" title="Forward 10 seconds" aria-label="Forward 10 seconds"><svg class="ten" viewBox="0 0 24 24" aria-hidden="true"><path class="arc" d="M12 4.6a7.4 7.4 0 1 0 7.4 7.4"/><path d="M11.6 1.9v5.4l3.8-2.7z"/><text x="12" y="15.3" text-anchor="middle">10</text></svg></button>
+      </div>
+      <div class="np-row">
+        <div class="volume"><svg class="speaker" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.2h3.8L12 4.6v14.8l-5.2-4.6H3z"/><path class="wave" d="M15.2 8.6a4.6 4.6 0 0 1 0 6.8M17.8 6a8.4 8.4 0 0 1 0 12"/></svg><input type="range" class="vol" min="0" max="100" value="70" aria-label="Volume"></div>
+        <button id="np-edit" class="btn ghost small lyrics-only" aria-haspopup="menu" hidden>Edit <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></button>
+      </div>
+      <div id="np-decide" class="np-decide" hidden>
+        <button data-judge="keep" class="verdict keep">Keep <kbd>K</kbd></button>
+        <button data-judge="pass" class="verdict pass">Pass <kbd>P</kbd></button>
+        <button data-judge="skip" class="verdict skip">Skip <kbd>S</kbd></button>
+      </div>
+      <canvas id="np-viz-side" class="viz side-viz" hidden aria-hidden="true"></canvas>
+    </aside>
+    <section class="np-main">
+      <div id="k-lines" class="k-lines" hidden></div>
+      <div id="np-plain" class="plain-lyrics" hidden></div>
+      <canvas id="np-viz" class="viz big-viz" hidden aria-hidden="true"></canvas>
+      <div id="np-note" class="np-note" hidden></div>
+    </section>
+  </div>
+  <div id="np-menu" class="menu" role="menu" hidden>
+    <div class="menu-head">Lyrics timing <span id="np-offset" class="offset">in sync</span></div>
+    <div class="menu-pair">
+      <button id="np-earlier" role="menuitem" title="Words light up too late">Earlier</button>
+      <button id="np-later" role="menuitem" title="Words light up too early">Later</button>
+    </div>
+    <button id="np-reset" role="menuitem">Reset timing</button>
+    <div class="menu-sep"></div>
+    <button id="np-fix" role="menuitem">Fix a line…</button>
+  </div>
+  <div id="np-empty" class="empty-state">
+    <svg class="empty-icon big" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="3"/><path d="M24 7a17 17 0 0 1 15 9"/></svg>
+    <h2>Nothing playing</h2>
+    <p>Pick a song in your Library — or start sifting and it shows up here, lyrics and all.</p>
+    <button class="btn accent" data-goto="library">Go to Library</button>
+  </div>
+</section>
+
+<!-- ======================================================== Leaderboard -->
+<section class="page" id="page-top">
+  <div class="stats" id="lb-stats"></div>
+  <div class="section-head"><h2>Most played</h2><span id="lb-summary" class="muted small"></span></div>
+  <div class="card table-card"><div id="lb-rows" class="lb-rows"></div></div>
+  <div id="lb-empty" class="empty-state" hidden>
+    <svg class="empty-icon big" viewBox="0 0 48 48"><path d="M16 40h16M24 32v8M12 8h24v8a12 12 0 0 1-24 0zM12 12H6a6 6 0 0 0 6 8M36 12h6a6 6 0 0 1-6 8"/></svg>
+    <h2>No plays yet</h2>
+    <p>A song counts as played once it plays to the end from your Library.</p>
+    <button class="btn accent" data-goto="library">Go to Library</button>
+  </div>
+</section>
+
+<!-- ============================================================= Trends -->
+<section class="page" id="page-trends">
+  <div class="stats" id="tr-stats"></div>
+  <div id="tr-status" class="muted small tr-status"></div>
+  <div id="tr-grid" class="trend-grid"></div>
+</section>
+
+<!-- ============================================================= Backup -->
+<section class="page" id="page-backup">
+  <div class="backup">
+    <div class="backup-hero card">
+      <svg class="empty-icon big" viewBox="0 0 48 48"><rect x="10" y="6" width="28" height="36" rx="4"/><path d="M17 6v8h14V6M18 26l6 6 6-6M24 18v14"/></svg>
+      <div>
+        <h2>Back up your library</h2>
+        <p class="muted">Copies every song onto a thumb drive, SD card or external disk, in album folders with a playlist file. After the first time only new songs are copied, and nothing is ever deleted from the drive.</p>
+        <div id="bk-size" class="small"></div>
+      </div>
+    </div>
+    <div class="section-head"><h2>Drives plugged in</h2><button id="bk-refresh" class="btn ghost small">Refresh</button></div>
+    <div id="bk-drives" class="drives"></div>
+    <div id="bk-progress" class="card bk-progress" hidden>
+      <div class="bk-now"><span id="bk-now"></span><span id="bk-count" class="muted"></span></div>
+      <div class="meter"><i id="bk-bar"></i></div>
+    </div>
+    <div id="bk-result"></div>
+  </div>
+</section>
+
+<!-- ======================================================= Mini player -->
+<footer class="mini" id="mini" hidden>
+  <button class="mini-art" id="mini-open" title="Show in Now Playing">
+    <svg class="art-ph" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="17"/></svg>
+    <img id="mini-img" alt="" hidden>
+  </button>
+  <div class="mini-meta"><div id="mini-title" class="t"></div><div id="mini-artist" class="a"></div></div>
+  <div class="mini-controls">
+    <button id="mini-prev" class="icon-btn" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 5h2.2v14H6zM20 5.8v12.4L9.4 12z"/></svg></button>
+    <button id="mini-play" class="primary small" aria-label="Play"><svg viewBox="0 0 24 24"><path class="i-play" d="M8 5.2v13.6L19 12z"/><path class="i-pause" d="M6.8 5h3.6v14H6.8zm6.8 0h3.6v14h-3.6z"/></svg></button>
+    <button id="mini-next" class="icon-btn" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M15.8 5H18v14h-2.2zM4 5.8v12.4L14.6 12z"/></svg></button>
+  </div>
+  <span id="mini-pos" class="time">0:00</span>
+  <div class="seek" id="mini-seek" role="slider" aria-label="Song position"><div class="seek-track"><div class="seek-fill"></div></div><div class="seek-knob"></div></div>
+  <span id="mini-dur" class="time">0:00</span>
+  <div class="volume"><svg class="speaker" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.2h3.8L12 4.6v14.8l-5.2-4.6H3z"/><path class="wave" d="M15.2 8.6a4.6 4.6 0 0 1 0 6.8"/></svg><input type="range" class="vol" min="0" max="100" value="70" aria-label="Volume"></div>
+  <button id="mini-now" class="btn ghost small mini-now" title="Now Playing (⌘3)">Now Playing <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 3l3 3-3 3"/></svg></button>
+</footer>
+
+<!-- ========================================================== Settings -->
+<div class="modal" id="settings" hidden>
+  <div class="sheet" role="dialog" aria-label="Settings">
+    <header><h2>Settings</h2><button class="icon-btn" data-close aria-label="Close"><svg class="stroke" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></header>
+    <section>
+      <h3>Look</h3>
+      <p class="muted small">The colors of the visualizer, the progress bars, the lyrics and the leaderboard.</p>
+      <div class="gradient-preview"></div>
+      <div id="looks" class="looks" role="radiogroup" aria-label="Look"></div>
+      <div class="pickers">
+        <label>Low<input type="color" id="c-low"></label>
+        <label>Middle<input type="color" id="c-mid"></label>
+        <label>High<input type="color" id="c-high"></label>
+        <button id="look-save" class="btn ghost small">+ Save as a look</button>
+      </div>
+    </section>
+    <section>
+      <h3>Visualizer</h3>
+      <p class="muted small">The same bars on every page. More bars show finer detail; a lower height keeps them calmer.</p>
+      <canvas id="viz-sample" class="viz-sample" aria-hidden="true"></canvas>
+      <div class="sliders">
+        <label><span>Bars <b id="viz-bars-v"></b></span><input type="range" class="slider" id="viz-bars" min="24" max="128" step="8" aria-label="Number of bars"></label>
+        <label><span>Height <b id="viz-height-v"></b></span><input type="range" class="slider" id="viz-height" min="40" max="100" step="5" aria-label="Height of the bars"></label>
+        <button id="viz-reset" class="btn ghost small">Reset</button>
+      </div>
+      <div class="switch-row calm-row">
+        <div><div>Calm</div><div class="muted small">15 frames a second instead of 30: a little less smooth, and about half the work for your Mac's screen.</div></div>
+        <button class="switch" id="viz-calm" aria-label="Calm visualizer"></button>
+      </div>
+    </section>
+    <section>
+      <h3>Lyrics</h3>
+      <div id="lyrics-settings"></div>
+    </section>
+    <section>
+      <h3>Library</h3>
+      <p class="small">Your library is one folder (subfolders are fine): <span id="set-folder" class="mono"></span>. Kept songs are copied into it, and the Library, stats and lyrics cover everything in it.</p>
+      <div class="set-buttons">
+        <button class="btn ghost small" id="set-library">Change…</button>
+        <button class="btn ghost small" id="set-reveal">Show in Finder</button>
+      </div>
+      <p class="muted small">Changing it moves nothing: songs stay where they are, and the app just looks in the new folder instead.</p>
+    </section>
+    <footer class="muted small" id="set-about"></footer>
+  </div>
+</div>
+
+<div id="drop" class="drop" hidden><div><svg class="empty-icon big" viewBox="0 0 48 48"><path d="M6 14a4 4 0 0 1 4-4h9l4 4h15a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path d="M24 20v10M19 25l5 5 5-5"/></svg>Drop the folder to start sifting</div></div>
+<div id="toast" class="toast" hidden></div>
+
+<script src="core.js"></script>
+<script src="sift.js"></script>
+<script src="library.js"></script>
+<script src="now.js"></script>
+<script src="stats.js"></script>
+<script src="backup.js"></script>
+</body>
+</html>

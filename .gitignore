@@ -1,0 +1,27 @@
+# Build output (./build.sh, swift build, swift test)
+.build/
+build/
+.swiftpm/
+*.zip
+
+# macOS
+.DS_Store
+._*
+
+# Local databases: the app's own library.db lives in Application Support,
+# but never commit one that ends up here (or its journal files)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Downloaded Whisper models (the app keeps them in Application Support/Siftr/Models)
+Models/
+*.mlmodelc/
+*.mlpackage/
+openai_whisper-*/
+
+# Demo music for screenshots (scripts/demo-setup.sh keeps it outside the repo by default)
+demo/

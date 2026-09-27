@@ -1,0 +1,271 @@
+/* Siftr -- page layouts. */
+
+/* ================================================================ Sifting */
+#page-sift { flex-direction: column; gap: 14px; padding: 6px 22px 14px; }
+.now-card { display: flex; gap: 22px; padding: 20px; height: clamp(256px, 43vh, 370px); flex: none; }
+.now-card .art { height: 100%; }
+.np { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.viz { width: 100%; display: block; }
+.now-card .viz { flex: 1; min-height: 60px; margin: 8px 0 2px; }
+.long-note { flex: none; font-size: 12px; color: var(--muted); margin: -2px 0 4px; }
+.transport { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex: none; }
+.transport.center { justify-content: center; gap: 12px; }
+
+/* The player's row: playing and volume on the left, Keep / Pass / Skip together on the right.
+   In a narrow window the volume slider gives up room first. */
+.transport .volume { flex: 0 1 136px; min-width: 17px; margin-left: 6px; }
+.transport .volume input[type=range].vol { flex: 1; width: auto; min-width: 0; }
+.transport .verdicts { flex: none; margin-left: auto; display: flex; gap: 10px; }
+.lists { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.panel { display: flex; flex-direction: column; min-height: 0; padding: 12px 8px 8px 14px; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 8px 7px 0;
+              font-size: 10.5px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.panel-head .hint, .panel-head .count { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 11.5px; }
+#queue li { cursor: pointer; }
+#queue li.more { cursor: default; color: var(--muted); font-size: 12px; justify-content: center; }
+#queue li.current { background: var(--card-2); color: var(--fg); font-weight: 600; }
+.rows .mark { width: 10px; flex: none; color: var(--g2); font-size: 10px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.dot.keep { background: var(--keep); } .dot.pass { background: var(--pass); }
+.tag { font-size: 10px; font-weight: 750; letter-spacing: .06em; width: 34px; flex: none; }
+.tag.keep { color: var(--keep); } .tag.pass { color: var(--pass); }
+#session li .t { flex: 1; }
+.undo { border: 0; background: none; color: var(--muted); width: 22px; height: 22px; border-radius: 6px; font-size: 15px; line-height: 1;
+        padding: 0; opacity: 0; flex: none; }
+#session li:hover .undo { opacity: 1; }
+.undo:hover { background: var(--card-3); color: var(--fg); }
+.panel-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+               color: var(--muted); text-align: center; padding: 0 16px 8px 0; }
+
+.status { display: flex; align-items: center; gap: 16px; font-size: 11.5px; color: var(--muted); min-height: 16px; flex: none; }
+#status { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.lifetime { white-space: nowrap; }
+.progress { display: flex; align-items: center; gap: 10px; flex: none; font-variant-numeric: tabular-nums; }
+.progress .bar { display: flex; width: 140px; height: 5px; border-radius: 3px; overflow: hidden; background: var(--track); }
+.progress .bar i { display: block; height: 100%; transition: width .25s; }
+.progress .bar .k { background: var(--keep); } .progress .bar .p { background: var(--pass); }
+
+/* ================================================================ Library */
+#page-library { flex-direction: column; padding: 8px 22px 12px; gap: 10px; }
+.page-head { display: flex; align-items: center; gap: 12px; flex: none; }
+.lib-body { flex: 1; min-height: 0; }
+#lib-songs { display: flex; flex-direction: column; }
+.songs-grid { display: grid; grid-template-columns: 46px minmax(150px, 2.3fr) minmax(100px, 1.3fr) minmax(100px, 1.3fr) 58px 56px 112px;
+              align-items: center; gap: 0 12px; }
+.table-head { padding: 0 12px 6px; border-bottom: 1px solid var(--line); flex: none; }
+.table-head button { border: 0; background: none; padding: 4px 0; text-align: left; font-size: 11px; font-weight: 650;
+                     letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.table-head button:hover { color: var(--fg); }
+.table-head button.sorted { color: var(--fg); }
+.table-head button.sorted::after { content: " ↓"; }
+.table-head button.sorted.asc::after { content: " ↑"; }
+.table-head .num, .songs-grid .num { text-align: right; }
+.table-rows { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 0; }
+.song-row { height: 46px; padding: 0 12px; border-radius: 10px; color: var(--fg-2); content-visibility: auto; contain-intrinsic-size: auto 46px; }
+.song-row:hover { background: var(--card-2); }
+.song-row { cursor: pointer; outline: none; }
+.song-row:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.song-row:active { background: var(--card-3); }
+.song-row.playing { color: var(--fg); }
+.song-row.playing .t { color: var(--g2); font-weight: 650; }
+.song-row .t { color: var(--fg); font-weight: 550; }
+.song-row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.song-row .muted-cell { color: var(--muted); }
+.song-row .num { font-variant-numeric: tabular-nums; color: var(--muted); }
+/* the Status column: a dot and a word or two */
+.status-head { padding: 4px 0 4px 14px; font-size: 11px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.song-row .status { padding-left: 14px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.song-row .status:not(:empty)::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px;
+                                          vertical-align: 1px; background: var(--muted); opacity: .6; }
+.song-row .status.ok::before, .song-row .status.new::before, .song-row.playing .status::before { opacity: 1; }
+.song-row .status.ok::before { background: var(--keep); }
+.song-row .status.new { color: var(--fg-2); }
+.song-row .status.new::before { background: var(--accent); }
+.song-row.playing .status { font-size: 0; }
+.song-row.playing .status::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px;
+                                     vertical-align: 1px; background: var(--g2); }
+.song-row.playing .status::after { content: "Playing"; font-size: 11.5px; color: var(--fg); }
+.play-thumb { position: relative; cursor: pointer; }
+.play-thumb::after { content: ""; position: absolute; inset: 0; border-radius: 6px; opacity: 0; transition: opacity .12s;
+                     background: rgba(0, 0, 0, .45) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M8 5.2v13.6L19 12z'/%3E%3C/svg%3E") center / 16px no-repeat; }
+.song-row:hover .play-thumb::after, .play-thumb:hover::after { opacity: 1; }
+
+.album-grid { overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 22px 18px; align-content: start; padding: 6px 4px 20px; }
+.album-card { border: 0; background: none; padding: 0; text-align: left; }
+.album-card .art { width: 100%; border-radius: 12px; transition: transform .18s ease, box-shadow .18s ease; }
+.album-card:hover .art { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0, 0, 0, .35); }
+.album-card .name { font-weight: 650; margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.album-card .meta { font-size: 11.5px; color: var(--muted); }
+.album-detail { overflow-y: auto; padding: 4px 0 20px; }
+.album-head { display: flex; gap: 22px; align-items: flex-end; margin: 6px 12px 18px; }
+.album-head .art { width: 170px; }
+.album-head h2 { margin: 4px 0 4px; font-size: 26px; letter-spacing: -.02em; }
+.album-head .actions { display: flex; gap: 8px; margin-top: 12px; }
+.back { border: 0; background: none; color: var(--accent); padding: 0; font-weight: 600; }
+
+.lyric-results { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 4px 0 20px; }
+.lyric-hit { display: grid; grid-template-columns: 48px 1fr; gap: 14px; padding: 12px 14px; border-radius: 12px; cursor: pointer; }
+.lyric-hit:hover { background: var(--card-2); }
+.lyric-hit .thumb { width: 48px; height: 48px; border-radius: 8px; }
+.lyric-hit .song { font-weight: 650; }
+.lyric-hit .by { color: var(--muted); font-size: 12px; }
+.lyric-line { display: flex; gap: 10px; align-items: baseline; margin-top: 6px; color: var(--fg-2); }
+.chip { flex: none; font-size: 11px; padding: 1px 7px; border-radius: 5px; background: var(--card-3); color: var(--muted); font-variant-numeric: tabular-nums; }
+mark { background: color-mix(in srgb, var(--g2) 28%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
+.lib-note { padding: 18px 12px; color: var(--muted); }
+
+/* ============================================================ Now Playing */
+#page-now { padding: 4px 28px 16px; }
+.np-grid { flex: 1; display: grid; grid-template-columns: clamp(260px, 31%, 380px) 1fr; gap: 40px; min-height: 0; }
+/* padded out into the gap so the cover's shadow isn't clipped into a box */
+.np-side { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow: hidden auto; padding: 6px 18px 30px; margin: 0 -18px; text-align: center; }
+/* the cover shrinks to leave room for the controls in a short window */
+.big-art { width: min(100%, max(150px, calc(100vh - 380px))); align-self: center; border-radius: 16px;
+           box-shadow: 0 10px 24px color-mix(in srgb, var(--amb, #000) 30%, rgba(0, 0, 0, .45)); }
+.np-meta { margin-top: 4px; }
+.np-meta .title { font-size: 23px; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.np-decide { display: flex; justify-content: center; gap: 10px; margin-top: 4px; }
+.np-row { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+.np-row .volume { flex: 1; }
+.np-row .volume input[type=range].vol { flex: 1; width: auto; }
+.np-row .btn { flex: none; display: inline-flex; align-items: center; gap: 5px; }
+.chev { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.offset { font-variant-numeric: tabular-nums; }
+/* the Edit menu: one small popover instead of a row of buttons */
+.menu { position: fixed; z-index: 30; width: 208px; padding: 6px; background: var(--card-solid); border: 1px solid var(--line-2);
+        border-radius: 12px; box-shadow: 0 14px 40px rgba(0, 0, 0, .4); display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; }
+.menu-head { display: flex; justify-content: space-between; padding: 5px 8px 6px; color: var(--muted); font-size: 11.5px; }
+.menu-head .offset { color: var(--fg-2); }
+.menu button { border: 0; background: none; text-align: left; padding: 6px 8px; border-radius: 7px; color: var(--fg); }
+.menu button:hover:not(:disabled) { background: var(--card-3); }
+.menu button:disabled { color: var(--faint); }
+.menu-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.menu-pair button { text-align: center; background: var(--card-2); }
+.menu-sep { height: 1px; margin: 4px 2px; background: var(--line-2); }
+/* the corner visualizer: whatever room is left under the controls */
+.side-viz { flex: 1 1 0; min-height: 0; max-height: 240px; width: 100%; margin-top: 12px; }
+.np-main { position: relative; min-height: 0; display: flex; flex-direction: column; }
+/* the wheel fades out top and bottom under two plain overlays in the page's
+   own solid color -- a mask on the wheel made every moving frame redraw it all */
+.np-main.wheel::before, .np-main.wheel::after { content: ""; position: absolute; left: 0; right: 0; height: 8%; z-index: 1; pointer-events: none; }
+.np-main.wheel::before { top: 0; background: linear-gradient(var(--bg1), transparent); }
+.np-main.wheel::after { bottom: 0; background: linear-gradient(transparent, var(--bg1)); }
+.np-note { z-index: 2; }
+.big-viz { flex: 1; min-height: 0; margin: 12% 0 10%; }
+.np-note { position: absolute; left: 0; right: 0; bottom: 8px; display: flex; justify-content: center; }
+.np-note .pill { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 7px 14px; color: var(--muted); font-size: 12px; }
+.np-main .ask-card { margin: auto; }
+.plain-lyrics { flex: 1; overflow-y: auto; padding: 10% 8% 20% 0; font-size: 21px; font-weight: 650; line-height: 1.55; color: var(--fg-2); white-space: pre-line;
+                -webkit-mask-image: linear-gradient(transparent, black 6%, black 92%, transparent); mask-image: linear-gradient(transparent, black 6%, black 92%, transparent); }
+
+/* the lyrics wheel (ported from the Python app's Now Playing) */
+.k-lines {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;   /* turned by transforms, never scrolled (now.js) */
+  padding: 32vh 16% 70vh 0; perspective: 900px; perspective-origin: 50% 40%;
+  scrollbar-width: none;
+}
+.k-lines::-webkit-scrollbar { display: none; }
+@property --glow { syntax: "<number>"; inherits: false; initial-value: 0; }
+/* Each line's place on the wheel (and its size, 1.2x while sung) is one
+   transform that now.js sets once per line change; the compositor glides
+   it there. The curve is fitted to the spring the page used to step by hand. */
+.k-line {
+  --lc: var(--g2);
+  --glow: 0;
+  --lit: color-mix(in srgb, var(--lc), white calc(var(--glow) * 28%));
+  --dim: color-mix(in srgb, var(--lc), transparent calc(var(--glow) * 60%));
+  --glide: 1.2s cubic-bezier(.2, .1, .35, 1);
+  font-size: clamp(1.3rem, 2.2vw, 2.05rem); font-weight: 750; line-height: 1.34; letter-spacing: -.02em;   /* large type: tighter */
+  padding: 10px 14px; border-radius: 12px; cursor: pointer;
+  width: fit-content;          /* each line is a layer with its own image: only as wide as its words */
+  transition: transform var(--glide), opacity var(--glide);
+  transform-origin: left center;
+}
+/* rolled off the wheel: plain and unseen, so it isn't a 3D layer to update every frame */
+.k-line.off { transform: none !important; visibility: hidden; transition: none; }
+/* fixing lines: a flat list that scrolls */
+.k-lines.editing { overflow-y: auto; }
+.k-lines.editing .k-line { transform: none !important; opacity: 1 !important; transition: none; }
+/* only while the pointer is moving: lines gliding under a resting pointer would each flash the highlight */
+.k-lines.pointing .k-line:hover { background: color-mix(in srgb, var(--card-2) 70%, transparent); }
+/* macOS's Reduce Motion: lines fade to their places instead of gliding round the wheel
+   (and words light up whole, core.js) */
+@media (prefers-reduced-motion: reduce) {
+  .k-line { transition: opacity .25s ease; }
+}
+/* The sung line's --glow is stepped by now.js along with the glide: it's a
+   color, so animating it here repainted the line every frame. No glow
+   filter either: a blurred shadow behind moving text made every frame a
+   full repaint. */
+/* placed straight away: back on the page, resized, turned by hand, or just coming onto the panel */
+.k-lines .k-line.jump { transition: none; }
+/* each word lights up letter by letter over the time it's held: a lit copy
+   of the word on top, cut to the part that's been sung (--f, 0 to 1). now.js
+   moves the cut along in small steps from the lyrics clock -- the same clock
+   that says which word is sung -- so the fill can't drift from the singing.
+   (It was a compositor animation, which on a 120 Hz screen ran ahead of the
+   page's clock and got pulled back at every commit: the fill jumped ahead,
+   lit the whole word, and snapped back.) Only the word being sung changes,
+   about 20 times a second; nothing else on the page is redrawn. */
+.k-line .w { position: relative; display: inline-block; white-space: nowrap; color: var(--dim); }
+.k-line.done .w { color: var(--lit); }
+.k-line .w .lit { position: absolute; inset: 0; color: var(--lit); pointer-events: none;
+                  clip-path: inset(-25% calc(100% - var(--f, 0) * 100%) -25% -10%); }
+/* Settings -> Lyrics -> letter by letter off: a sung word lights up whole at
+   once, so nothing animates while it's sung (the fill is the lyrics' biggest cost) */
+body.whole-words .k-line .w.sung { color: var(--lit); }
+.k-lines.editing .k-line { cursor: text; }
+.k-lines.editing .k-line.edited::after { content: "edited"; font-size: .45em; font-weight: 500; color: var(--muted); margin-left: 10px; }
+.k-line input { width: 100%; font: inherit; color: var(--fg); background: var(--card-2); border: 1px solid var(--accent); border-radius: 10px; padding: 4px 8px; outline: none; }
+
+/* ============================================================ Leaderboard */
+#page-top, #page-trends { flex-direction: column; overflow-y: auto; padding: 8px 24px 24px; }
+#page-top > *, #page-trends > * { flex: none; }
+.table-card { padding: 6px; }
+.lb-row { display: grid; grid-template-columns: 38px 40px minmax(140px, 1.6fr) minmax(100px, 1fr) minmax(160px, 1.6fr) 104px;
+          align-items: center; gap: 12px; height: 52px; padding: 0 10px; border-radius: 10px; cursor: pointer; }
+.lb-row:hover { background: var(--card-2); }
+.lb-row .rank { text-align: right; font-weight: 750; font-variant-numeric: tabular-nums; color: var(--muted); }
+.lb-row.m1 .rank { color: #e7b416; } .lb-row.m2 .rank { color: #a9b3bd; } .lb-row.m3 .rank { color: #c47f45; }
+.lb-row .thumb { width: 40px; height: 40px; }
+.lb-row .t { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-row .a, .lb-row .when { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-row .when { text-align: right; font-size: 12px; }
+.plays { display: flex; align-items: center; gap: 10px; }
+.plays .meter { flex: 1; }
+.plays .n { min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums; font-weight: 650; }
+
+/* ================================================================= Trends */
+.tr-status { margin: 12px 2px 4px; }
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 10px; }
+.trend-card { padding: 16px 16px 12px; }
+.trend-card h3 { margin: 0 0 2px; font-size: 14px; }
+.trend-card .sub { font-size: 12px; margin-bottom: 10px; white-space: normal; }
+.trend-row { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; padding: 6px; border-radius: 9px; cursor: pointer; }
+.trend-row:hover { background: var(--card-2); }
+.trend-row .thumb { width: 38px; height: 38px; }
+.trend-row .t { font-weight: 650; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trend-row .d { font-size: 11.5px; color: var(--muted); }
+.locked { color: var(--muted); font-size: 12.5px; padding: 8px 6px; }
+.era { padding: 7px 4px; }
+.era .line { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; margin-bottom: 5px; }
+.era .line span { color: var(--muted); white-space: nowrap; }
+
+/* ================================================================= Backup */
+#page-backup { overflow-y: auto; padding: 8px 24px 24px; }
+.backup { max-width: 780px; margin: 0 auto; width: 100%; }
+.backup-hero { display: flex; gap: 18px; padding: 20px 22px; align-items: flex-start; }
+.backup-hero h2 { margin: 0 0 6px; font-size: 18px; }
+.backup-hero p { margin: 0 0 8px; line-height: 1.5; }
+.drives { display: grid; gap: 10px; }
+.drive { display: grid; grid-template-columns: 38px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; }
+.drive svg { width: 30px; height: 30px; fill: none; stroke: var(--g2); stroke-width: 1.8; }
+.drive .name { font-weight: 650; }
+.drive .meter { margin: 6px 0 4px; }
+.drive .info { font-size: 11.5px; color: var(--muted); }
+.drive .actions { display: flex; gap: 8px; }
+.bk-progress { padding: 14px 16px; margin-top: 12px; }
+.bk-now { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; font-size: 12.5px; }
+.bk-result { padding: 14px 16px; margin-top: 12px; }
+.bk-result h3 { margin: 0 0 6px; font-size: 14px; }
+.bk-result ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 12px; }
