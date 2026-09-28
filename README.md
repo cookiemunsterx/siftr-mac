@@ -4,6 +4,8 @@ Siftr is a 2 MB Mac app that plays through a folder of new music and lets you Ke
 
 <!-- Demo GIF: replace this line with ![Siftr: Keep, Pass and Skip](docs/demo.gif) -->
 
+![Siftr sorting a batch of 50 new songs: 32 kept, 8 passed, 10 still to go](docs/screenshots/sifting.png)
+
 ## What it does
 
 - **Sort by ear.** Open a folder of new songs and Siftr plays them one by
@@ -28,6 +30,14 @@ Siftr is a 2 MB Mac app that plays through a folder of new music and lets you Ke
 
 No account, and nothing leaves your Mac except that optional lyrics download.
 Every page and shortcut is in [the guide](docs/GUIDE.md).
+
+## Screenshots
+
+| Library | Now Playing | Leaderboard |
+|---|---|---|
+| [![The Library: every kept song, with plays and lyrics](docs/screenshots/library.png)](docs/screenshots/library.png) | [![Now Playing: synced lyrics on a karaoke-style wheel](docs/screenshots/now-playing.png)](docs/screenshots/now-playing.png) | [![The Leaderboard: most played songs and listening time](docs/screenshots/leaderboard.png)](docs/screenshots/leaderboard.png) |
+
+The songs, artists and covers in these pictures are made up for the demo.
 
 ## Install
 
