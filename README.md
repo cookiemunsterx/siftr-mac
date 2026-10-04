@@ -2,7 +2,7 @@
 
 Siftr is a 2 MB Mac app that plays through a folder of new music and lets you Keep, Pass or Skip each song with one key, remembering every decision.
 
-<!-- Demo GIF: replace this line with ![Siftr: Keep, Pass and Skip](docs/demo.gif) -->
+![Siftr: Keep, Pass and Skip](docs/demo.gif)
 
 ![Siftr sorting a batch of 50 new songs: 32 kept, 8 passed, 10 still to go](docs/screenshots/sifting.png)
 
